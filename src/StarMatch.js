@@ -32,7 +32,7 @@ const PlayAgain = props => (
 
 
 
-const StarMatch = () => {
+const Game = (props) => {
     const [stars, setStars] = useState(utils.random(1,9));
     const [availableNums, setAvailableNums] = useState(utils.range(1,9));
     const [candidateNums, setCandidateNums] = useState([]);
@@ -52,9 +52,6 @@ const StarMatch = () => {
 
     const candidatesAreWrong = utils.sum(candidateNums) > stars; 
     
-    // const gameIsWon = availableNums.length === 0 ;
-    // const gameIsLost = secondsLeft === 0; 
-    
     const gameStatus = availableNums.length === 0 ? 'won' : 
     secondsLeft === 0 ? 'lost' : 'active';
     
@@ -67,12 +64,13 @@ const StarMatch = () => {
         }
         return 'available';
     }
-    const onButtonClick = () => {
-      setSecondsLeft(10);
-      setStars(utils.random(1,9));
-      setAvailableNums(utils.range(1,9));
-      setCandidateNums([]);
-    }
+    
+    // const onButtonClick = () => {
+    //   setSecondsLeft(10);
+    //   setStars(utils.random(1,9));
+    //   setAvailableNums(utils.range(1,9));
+    //   setCandidateNums([]);
+    // }
 
     const onNumberClick = (number, status) => {
        if(status === 'used'){
@@ -103,8 +101,9 @@ const StarMatch = () => {
         </div>
         <div className="body">
           <div className="left">
-            { gameStatus !== 'active' ? (<PlayAgain 
-             onClick={onButtonClick}
+            { gameStatus !== 'active' ? (
+            <PlayAgain 
+             onClick={props.startNewGame}
              gameStatus = {gameStatus}/>) :
               (<StarsDisplay count={stars}/>)
             }
@@ -124,6 +123,11 @@ const StarMatch = () => {
       </div>
     );
   };
+
+  const StarMatch = () => {
+    const [gameId, setGameId] = useState(1);
+    return <Game key={gameId} startNewGame = {() => setGameId(gameId + 1)}/>;
+  }
 
   // Color Theme
 const colors = {
@@ -162,5 +166,6 @@ const colors = {
       return sums[utils.random(0, sums.length - 1)];
     },
   };
-
+  
+ 
   export default StarMatch;
